@@ -1,26 +1,33 @@
+#LIBRARIES
 import os
 import datetime
-file=open('Sirve.txt','w')
+
+#CREATE FILE AND WRITE TEXT
+file=open('Example.txt','w')
 file.write('Esperemos que esto sirva')
 file.close()
 
-
-
+#OBTAIN FILE INFO
 print(os.getcwd())   
 print(os.path.abspath('Sirve.txt'))
 print(os.path.getsize('Sirve.txt'))
 
-#Para mostrar la ultima modificacion
+#SHOW LAST MODIFICATION
 fecha=os.path.getmtime('Sirve.txt')
 print(datetime.datetime.fromtimestamp(fecha))
 
-
-#Crea un directorio (mk) y te cambias a un directorio (ch)
+#CREATE DIRECTORY
 os.mkdir('Dir_1')
 print(os.getcwd())
-# # os.chdir('Dir_1')
-# # print(os.getcwd())
 
-#Eliminas directorio (rm), para que funcione no puedes estar dentro del directorio que vas a eliminar
-os.mkdir('Dir_2')
+#CHANGE DIRECTORY
+os.chdir('Dir_1')
+print(os.getcwd())
+
+#REMOVE DIRECTORY
 os.rmdir('Dir_1')
+
+#MODIFY FILE
+with open ("Example.txt","w") as file:
+    file.write("")
+
