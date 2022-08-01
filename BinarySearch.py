@@ -3,9 +3,11 @@ import time
 ###THE LIST MUST BE SORTED###
 
 def binary_search(num,key):
+
     start=time.perf_counter()
     left=0
     right=len(num)-1
+
     while left<= right:
         middle=(left+right)//2
 
@@ -24,12 +26,16 @@ def binary_search(num,key):
 
 
 def linear_search(num,key):
+
     start=time.perf_counter()
+
     for i, item in enumerate (num):
+        
         if key==item:
             finish=time.perf_counter()
             total=finish-start
             return print("{} is in position {} and it took {:0.10f} seconds".format(key,i,total)) 
+    
     return print("{} is not on the list".format(key))
 
 
