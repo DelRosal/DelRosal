@@ -6,13 +6,13 @@ import tkinter as tk
 from PIL import ImageGrab, Image 
 import numpy as np
 
-model=load_model("Model_ChineseDigits.h5")
+model=load_model("AI_MachineLearning\model_digit.h5")
 
 def predict(img):
-    img=img.resize((64,64))
+    img=img.resize((28,28))
     img=img.convert("L")
     img=np.array(img)
-    img=img.reshape(1,64,64,1)
+    img=img.reshape(1,28,28,1)
     img=img/255.0
     res=model.predict([img])[0]
     print(np.argmax(res), max(res))
