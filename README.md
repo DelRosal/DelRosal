@@ -1,5 +1,4 @@
 ## Hi there 👋
-### DelRosal
 This repository works as a version control of my projects. 🔭
 
 #### AI 💡, Machine Learning 👾, OS 🖥️ , etc. 🎲 
