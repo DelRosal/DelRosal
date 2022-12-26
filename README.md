@@ -1,7 +1,10 @@
-### Hi there 👋
-add projects with links
-different subjects
-brief description
+## Hi there 👋
+### DelRosal
+This repository works as a version control of my projects. 🔭
+
+#### AI 💡, Machine Learning 👾, OS 🖥️ , etc. 🎲 
+##### _Python , C++_
+
 <!--
 **DelRosal/DelRosal** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
