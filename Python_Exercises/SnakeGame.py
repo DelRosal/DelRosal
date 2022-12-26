@@ -1,144 +1,127 @@
-#LIBRERIAS
+#LIBRARIES
 import pygame as game
+import random
 import time
-import random 
-
-game.init()
 
 #COLOR CODING
-white=(255,255,255)
-black=(0,0,0)
-red=(255,0,0)
-blue=(0,255,255)
-green=(0,255,0)
-yellow=(255,255,102)
+black=(0,0,0)           #Background
+white=(255,255,255)     #Food
+orange=(255,100,10)     #Food
+blue=(0,255,255)        #Snake 
+green=(0,255,170)       #Score
 
 #SCREEN
-show_width=375
-show_height=450
-show=game.display.set_mode((show_width,show_height))
-game.display.set_caption('Snake Game for UTEPO')
-clock=game.time.Clock()
+Screen_x=600
+Screen_y=800
 
 #SNAKE SETTINGS
-S_size=10
 S_speed=15
 
-#FONTS
-font=game.font.SysFont('Lucida Console',30)
-Score_font=game.font.SysFont('comicsansms',15)
+#START SCREEN
+game.init()
+game.display.set_caption('Snake Game <3')
+Screen=game.display.set_mode((Screen_x,Screen_y))
+clock=game.time.Clock()
 
 #SCORE
-def Score(score):
-    val=Score_font.render('Score: '+ str(score),True,white)
-    show.blit(val,[0,0])
+score=0
+def Score(score,color):
+    font=game.font.SysFont('Lucida Console',25)
+    Mess=font.render('Score: '+str(score),True,color)
+    Score_pos=Mess.get_rect()
+    Screen.blit(Mess,Score_pos)
 
-#SNAKE BODY
-def Snake(S_size,S_list):
-    for x in S_list:
-        game.draw.rect(show,blue,[x[0],x[1],S_size,S_size])
-
-#MESSAGE 
-def Message(msg,color,y):
-    Mess=font.render(msg,True,color)
-    show.blit(Mess,[show_width/6,y])
-
-#GAME LOOP
-def Game_loop():
-
-    game_over=False
-    game_close=False
-
-    #SNAKE MOVEMENT
-    x=show_width/2
-    y=show_height/2
-
-    Xchange=0
-    Ychange=0
-
-    #SETTINGS
-    S_list=[]
-    S_length=1
-
-    #FOOD PLACEMENT
-    Food_x=round(random.randrange(0,show_width-S_size)/10.0)*10.0
-    Food_y=round(random.randrange(0,show_height-S_size)/10.0)*10.0
-
-    while not game_over:
-        
-        #PLAY AGAIN
-        while game_close==True:
-            show.fill(black)
-            Message(' --GAME OVER--',white,show_height/6)
-            Message('--Press Q-Quit--', red,show_height/4)
-            Message(' --C-Continue--',green,show_height/3)
-            game.display.update()
-            for event in game.event.get():
-                    if event.type==game.KEYDOWN:
-                        if event.key==game.K_q:
-                            game_over=True
-                            game_close=False
-                        if event.key==game.K_c:
-                            Game_loop()
-
-        #GAME 
-        for event in game.event.get():
-            
-            #QUIT SCREEN
-            if event.type==game.QUIT:
-                game_over=True  
-            
-            #MOVEMENT
-            if event.type==game.KEYDOWN:
-                if(event.key==game.K_LEFT):
-                    Xchange=-S_size
-                    Ychange=0
-                elif(event.key==game.K_RIGHT):
-                    Xchange=S_size
-                    Ychange=0
-                elif(event.key==game.K_UP):
-                    Xchange=0
-                    Ychange=-S_size
-                elif(event.key==game.K_DOWN):
-                    Xchange=0
-                    Ychange=S_size
-
-        #SCREEN LIMITS            
-        if (x>=show_width or x<0 or y>=show_height or y<0):
-            game_close=True
-
-        x+=Xchange
-        y+=Ychange
-        show.fill(black)
-
-        #DRAW SNAKE AND FOOD
-        game.draw.rect(show,yellow,[Food_x,Food_y,S_size,S_size])
-
-        S_head=[]
-        S_head.append(x)
-        S_head.append(y)
-        S_list.append(S_head)
-        
-        if len(S_list)>S_length:
-            del S_list[0]
-
-        for x in S_list[:-1]:
-            if x== S_head:
-                game_close=True
-        
-        Snake(S_size,S_list)
-        Score(S_length-1)
-        game.display.update()
-
-        if x==Food_x and y==Food_y:
-            print('yummy')
-            Food_x=round(random.randrange(0,show_width-S_size)/10.0)*10.0
-            Food_y=round(random.randrange(0,show_height-S_size)/10.0)*10.0
-            S_length+=1
-
-        clock.tick(S_speed)
-
+#GAME OVER
+def GameOver():
+    font=game.font.SysFont('Lucida Console',30)
+    Mess=font.render('Final Score: '+str(score),True,white)
+    Mess_pos=Mess.get_rect()
+    Screen.blit(Mess,Mess_pos)
+    game.display.flip()
+    time.sleep(1)
+    
     game.quit()
     quit()
 
-Game_loop()
+
+#DEFAULT SNAKE
+S_pos=[200,300]
+S_body=[[200,300],[190,300],[180,300],[170,300]]
+
+#SNAKE DIRECTION
+S_dir='RIGHT'
+change_to=S_dir
+
+#FRUIT
+F_pos=[random.randrange(1,(Screen_x//10))*10,random.randrange(1,(Screen_y//10))*10]
+F_spawn=True
+
+#MAIN CODE
+while True:
+    #SNAKE KEYS
+    for event in game.event.get():
+        if event.type==game.QUIT:
+                game.quit()
+                quit()
+        if event.type==game.KEYDOWN:
+            if(event.key==game.K_UP):
+                change_to='UP'
+            if(event.key==game.K_DOWN):
+                change_to='DOWN'
+            if(event.key==game.K_LEFT):
+                change_to='LEFT'
+            if(event.key==game.K_RIGHT):
+                change_to='RIGHT'
+    
+    #DIAGONAL
+    if change_to=='UP' and S_dir!='DOWN':
+        S_dir='UP'
+    if change_to=='DOWN' and S_dir!='UP':
+        S_dir='DOWN'
+    if change_to=='LEFT' and S_dir!='RIGHT':
+        S_dir='LEFT'
+    if change_to=='RIGHT' and S_dir!='LEFT':
+        S_dir='RIGHT'
+
+    #SNAKE MOVEMENT
+    if change_to=='UP':
+        S_pos[1]-=10
+    if change_to=='DOWN':
+        S_pos[1]+=10
+    if change_to=='LEFT':
+        S_pos[0]-=10
+    if change_to=='RIGHT':
+        S_pos[0]+=10
+
+    #SNAKE GROWTH
+    S_body.insert(0,list(S_pos))
+    if S_pos[0]==F_pos[0] and S_pos[1]==F_pos[1]:
+        score+=1
+        F_spawn=False
+    else:
+        S_body.pop()
+
+    if F_spawn==False:
+        F_pos=[random.randrange(1,(Screen_x//10))*10,random.randrange(1,(Screen_y//10))*10]
+
+    F_spawn=True
+    Screen.fill(black)
+
+    for pos in S_body:
+        game.draw.rect(Screen,blue,game.Rect(pos[0],pos[1],10,10))
+
+    game.draw.rect(Screen,orange,game.Rect(F_pos[0],F_pos[1],10,10))
+
+    #GAME OVER CONDITIONS
+    if S_pos[0]<0 or S_pos[0]>Screen_x or S_pos[1]<0 or S_pos[1]>Screen_y:
+        GameOver()
+    for block in S_body[1:]:
+        if S_pos[0]==block[0] and S_pos[1]==block[1]:
+            GameOver()
+
+    #SCORE DURING GAME
+    Score(score,green)
+
+    #REFRESH
+    game.display.update()
+    clock.tick(S_speed)
